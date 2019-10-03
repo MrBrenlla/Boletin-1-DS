@@ -5,8 +5,6 @@
  */
 package e1;
 
-import java.util.*;
-
 /**
  *
  * @author Brais
@@ -28,8 +26,10 @@ public class MatrixFunctions {
     
     public static int rowSum ( int [][] a , int row ) { 
         int sum =0;
-        for (int i=0; i<a[row].length; i++){
-            sum+= a[row][i];
+        if ( row<a.length ){
+            for (int i=0; i<a[row].length; i++){
+                sum+= a[row][i];
+            }
         }
         return sum;
     }
@@ -113,59 +113,26 @@ public class MatrixFunctions {
         return ((diagonal2 == diagonal1) && (diagonal1 == rowSum(a,0)));
     }
     
-    public static boolean isSequence ( int [][] a) { 
+    
+     public static boolean isSequence ( int [][] a) { 
         if (!isSquare(a)){
             return false;
         }
+        boolean atopados[] = new boolean[a.length*a.length];
+        for (int h = 0 ; h<atopados.length;h++) atopados[h]=false;
         boolean existe = false;
-        for (int num = 1 ; num < (a.length*a.length) ; num++){ /*Calculase o numero a buscar*/
-            for (int i = 0 ; i<a.length ; i++){
-                for (int ii = 0 ; ii<a.length ; ii++){ /*Recorrese o array*/
-                    
-                    if ((a[i][ii] == num) && (existe)){ /* Comprobase que non apareza o numero unha segunda vez, pois esto significaria que non é unha secuencia, o que poderia simplificar a execución en arrays grandes*/
-                        return false;
-                    }
-                    if (a[i][ii] == num){ /*Comprobase se o numero actual é o buscado*/
-                        existe = true;
-                    }
+        for (int i = 1 ; i < (a.length) ; i++){ /* recorrese o array */
+            for (int j = 0 ; j<a.length ; j++){
+                if(atopados[(a[i][j])-1]){      /* se o número xa foi leido en outra posición devolvese false */
+                    return false;
+                }
+                else{                           /* se non foi leido antes gardase que se acaba de leer */
+                    atopados[(a[i][j])-1]=true;
                 }
             }
-            if (!(existe)){
-                return false;
-            }
-            existe=false;
         }
         return true;
     }
     
-    public static void main(String[] args){ /* O main é unha comprobación para comprobar que todo funciona, non é parte do traballo a enviar*/
-        int[][] A;
-        A = new int[3][];
-        A[0] = new int[3];
-        A[1] = new int[3];
-        A[2] = new int[3];
-        
-        for (int i=0; i<A.length ; i++){
-            int alto = A[i].length;
-            for (int ii=0; ii<alto ; ii++){
-                A[i][ii]=i+1+ii*3;
-            }
-        }
-        
-        System.out.println("O máximo é: " + MatrixFunctions.max(A));
-        System.out.println("A suma da fila 0 é : " + MatrixFunctions.rowSum(A , 0));
-        System.out.println("A suma da fila 1 é : " + MatrixFunctions.rowSum(A , 1));
-        System.out.println("A suma da fila 2 é : " + MatrixFunctions.rowSum(A , 2));
-        System.out.println("A suma da columna 0 é : " + MatrixFunctions.columnSum(A , 0));
-        System.out.println("A suma da columna 1 é : " + MatrixFunctions.columnSum(A , 1));
-        System.out.println("A suma da columna 2 é : " + MatrixFunctions.columnSum(A , 2));
-        System.out.println("A suma das filas é : " + MatrixFunctions.allRowSums(A)[0]+" "+MatrixFunctions.allRowSums(A)[1]+" "+MatrixFunctions.allRowSums(A)[2]);
-        System.out.println("A suma das columnas é : " + MatrixFunctions.allColumnSums(A)[0]+" "+MatrixFunctions.allColumnSums(A)[1]+" "+MatrixFunctions.allColumnSums(A)[2]);
-        System.out.println("Filas máxicas: " + MatrixFunctions.isRowMagic(A));
-        System.out.println("Columnas máxicas: " + MatrixFunctions.isColumnMagic(A));
-        System.out.println("É cadrada: " + MatrixFunctions.isSquare(A));
-        System.out.println("É máxico: " + MatrixFunctions.isMagic(A));
-        System.out.println("É unha secuencia: " + MatrixFunctions.isSequence(A));
-    }
 }
 
